@@ -1,5 +1,6 @@
+"use client"
 import { ReactNode } from "react"
-import { FormBuilderProvider } from "./form-builder-provider"
+import { FormBuilderProvider } from "./form-builder-context"
 import { paletteItems } from "./config"
 import { FormBuilderPaletteItem } from "./form-builder-palette-item"
 import { cn } from "@/lib/utils"

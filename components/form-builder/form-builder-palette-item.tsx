@@ -1,13 +1,33 @@
+"use client"
 import { HandIcon } from "lucide-react"
 import { PaletteItemConfig } from "./types"
 import { cn } from "@/lib/utils"
+import { useDraggable } from "@dnd-kit/core"
 
 export function FormBuilderPaletteItem({ item }: { item: PaletteItemConfig }) {
+  const { attributes, isDragging, listeners, setNodeRef, transform } =
+    useDraggable({
+      id: item.type,
+      data: {
+        source: "palette",
+        item: item,
+      },
+    })
+
   return (
     <li
+      ref={setNodeRef}
+      style={{
+        transform: isDragging
+          ? `translate3d(${transform?.x}px, ${transform?.y}px, 0)`
+          : undefined,
+      }}
       className={cn(
-        "group flex items-center gap-2 rounded-xl border bg-card p-2 ring-border hover:cursor-grab hover:ring-1"
+        "group flex items-center gap-2 rounded-xl border bg-card p-2 ring-border hover:cursor-grab hover:ring-1",
+        isDragging && "bg-secondary"
       )}
+      {...listeners}
+      {...attributes}
     >
       <item.icon className="size-4" />
       <p className="text-sm">{item.label}</p>
