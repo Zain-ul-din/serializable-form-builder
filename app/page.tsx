@@ -1,5 +1,6 @@
 import {
   FormBuilder,
+  FormBuilderCanvas,
   FormBuilderPalette,
   FormBuilderPaletteItems,
 } from "@/components/form-builder/form-builder"
@@ -12,6 +13,8 @@ export default function Page() {
           <FormBuilderPalette>
             <FormBuilderPaletteItems />
           </FormBuilderPalette>
+
+          <FormBuilderCanvas />
         </FormBuilder>
       </section>
     </main>
