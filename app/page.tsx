@@ -12,8 +12,8 @@ export default function Page() {
   return (
     <>
       <Header />
-      <main className="flex h-dvh items-center justify-center">
-        <section className="w-full max-w-7xl rounded-xl border p-6">
+      <main className="flex items-center justify-center py-24">
+        <section className="w-full p-4">
           <FormBuilder>
             <FormBuilderPalette>
               <FormBuilderPaletteItems />

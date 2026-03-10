@@ -34,7 +34,7 @@ export function FormBuilderCanvasRender({ className }: { className?: string }) {
           </EmptyHeader>
         </Empty>
       ) : (
-        <ul className="w-full">
+        <ul className="w-full py-4">
           {fields.map((field, i, self) => (
             <FormBuilderField
               key={i}

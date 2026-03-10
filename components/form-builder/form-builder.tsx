@@ -10,13 +10,19 @@ import { FormBuilderSettingsRender } from "./form-builder-settings-render"
 export function FormBuilder({ children }: { children: ReactNode }) {
   return (
     <FormBuilderProvider>
-      <div className="grid grid-cols-10 gap-4">{children}</div>
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-[250px_1fr_350px] rounded-xl border">
+        {children}
+      </div>
     </FormBuilderProvider>
   )
 }
 
 export function FormBuilderPalette({ children }: { children: ReactNode }) {
-  return <aside className={cn("col-span-3")}>{children}</aside>
+  return <aside className="border-r p-4">{children}</aside>
+}
+
+export function FormBuilderPaletteHeader() {
+  return <h3 className="mb-4 text-base font-semibold">Drag & Drop</h3>
 }
 
 export function FormBuilderPaletteItems({ className }: { className?: string }) {
@@ -30,9 +36,13 @@ export function FormBuilderPaletteItems({ className }: { className?: string }) {
 }
 
 export function FormBuilderCanvas({ className }: { className?: string }) {
-  return <FormBuilderCanvasRender className={cn("col-span-4", className)} />
+  return (
+    <FormBuilderCanvasRender
+      className={cn("mx-auto max-w-xl overflow-y-auto p-4", className)}
+    />
+  )
 }
 
 export function FormBuilderSettings() {
-  return <FormBuilderSettingsRender className="col-span-3" />
+  return <FormBuilderSettingsRender className="border-l bg-card/50 p-4" />
 }
