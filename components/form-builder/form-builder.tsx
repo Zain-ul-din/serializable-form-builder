@@ -10,7 +10,7 @@ import { FormBuilderSettingsRender } from "./form-builder-settings-render"
 export function FormBuilder({ children }: { children: ReactNode }) {
   return (
     <FormBuilderProvider>
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-[250px_1fr_350px] rounded-xl border">
+      <div className="mx-auto grid h-[calc(100vh-12rem)] w-full max-w-7xl grid-cols-[250px_1fr_350px] overflow-hidden rounded-xl border">
         {children}
       </div>
     </FormBuilderProvider>
@@ -18,7 +18,7 @@ export function FormBuilder({ children }: { children: ReactNode }) {
 }
 
 export function FormBuilderPalette({ children }: { children: ReactNode }) {
-  return <aside className="border-r p-4">{children}</aside>
+  return <aside className="min-h-0 overflow-y-auto overflow-x-hidden border-r p-4">{children}</aside>
 }
 
 export function FormBuilderPaletteHeader() {
@@ -38,11 +38,11 @@ export function FormBuilderPaletteItems({ className }: { className?: string }) {
 export function FormBuilderCanvas({ className }: { className?: string }) {
   return (
     <FormBuilderCanvasRender
-      className={cn("mx-auto max-w-xl overflow-y-auto p-4", className)}
+      className={cn("mx-auto min-h-0 max-w-xl overflow-y-auto p-4", className)}
     />
   )
 }
 
 export function FormBuilderSettings() {
-  return <FormBuilderSettingsRender className="border-l bg-card/50 p-4" />
+  return <FormBuilderSettingsRender className="min-h-0 overflow-y-auto border-l bg-card/50 p-4" />
 }

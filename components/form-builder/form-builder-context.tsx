@@ -2,8 +2,8 @@
 import { createContext, use, useState } from "react"
 
 import { ReactNode } from "react"
-import { DndContext, DragEndEvent } from "@dnd-kit/core"
-import { DragData, FieldConfig, FieldOption, ValidationRule } from "./types"
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
+import { DragData, FieldConfig, FieldOption, PaletteItemConfig, ValidationRule } from "./types"
 import { nanoid } from "nanoid"
 
 type FormBuilderContextValue = {
@@ -37,8 +37,17 @@ const FromBuilderContext = createContext<FormBuilderContextValue | null>(null)
 export function FormBuilderProvider({ children }: { children?: ReactNode }) {
   const [fields, setFields] = useState<FieldConfig[]>([])
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null)
+  const [activePaletteItem, setActivePaletteItem] = useState<PaletteItemConfig | null>(null)
+
+  const handleOnDragStart = (e: DragStartEvent) => {
+    const dragData = e.active.data.current as DragData
+    if (dragData.source === "palette") {
+      setActivePaletteItem(dragData.item)
+    }
+  }
 
   const handleOnDragEnd = (e: DragEndEvent) => {
+    setActivePaletteItem(null)
     const dragData = e.active.data.current as DragData
 
     if (dragData.source === "palette") {
@@ -190,7 +199,17 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
         },
       }}
     >
-      <DndContext onDragEnd={handleOnDragEnd}>{children}</DndContext>
+      <DndContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
+        {children}
+        <DragOverlay dropAnimation={null}>
+          {activePaletteItem && (
+            <div className="flex items-center gap-2 rounded-xl border bg-card p-2 shadow-lg">
+              <activePaletteItem.icon className="size-4" />
+              <p className="text-sm">{activePaletteItem.label}</p>
+            </div>
+          )}
+        </DragOverlay>
+      </DndContext>
     </FromBuilderContext>
   )
 }
