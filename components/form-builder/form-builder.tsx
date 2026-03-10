@@ -5,6 +5,7 @@ import { paletteItems } from "./config"
 import { FormBuilderPaletteItem } from "./form-builder-palette-item"
 import { cn } from "@/lib/utils"
 import { FormBuilderCanvasRender } from "./form-builder-canvas-render"
+import { FormBuilderSettingsRender } from "./form-builder-settings-render"
 
 export function FormBuilder({ children }: { children: ReactNode }) {
   return (
@@ -30,4 +31,8 @@ export function FormBuilderPaletteItems({ className }: { className?: string }) {
 
 export function FormBuilderCanvas({ className }: { className?: string }) {
   return <FormBuilderCanvasRender className={cn("col-span-4", className)} />
+}
+
+export function FormBuilderSettings() {
+  return <FormBuilderSettingsRender className="col-span-3" />
 }
