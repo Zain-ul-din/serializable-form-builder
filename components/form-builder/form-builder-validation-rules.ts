@@ -1,11 +1,10 @@
-import { z } from "zod"
-import { FieldConfig } from "./types"
+import { z } from "zod/v4"
+import { FieldConfig, ValidationRule } from "./types"
 
 /**
  * Generates a runtime Zod schema for a single field based on its configuration
  */
 export function generateFieldZodSchema(field: FieldConfig): z.ZodTypeAny {
-  // Start with base schema based on field type
   let schema: z.ZodTypeAny
 
   switch (field.type) {
@@ -23,7 +22,7 @@ export function generateFieldZodSchema(field: FieldConfig): z.ZodTypeAny {
       break
 
     case "date":
-      schema = z.coerce.date() // Use coerce for form inputs
+      schema = z.coerce.date()
       break
 
     case "checkbox":
@@ -58,10 +57,10 @@ export function generateFieldZodSchema(field: FieldConfig): z.ZodTypeAny {
 
   // Auto-apply type-specific validations
   if (field.type === "email" && schema instanceof z.ZodString) {
-    schema = schema.email("Invalid email address")
+    schema = z.email("Invalid email address")
   }
   if (field.type === "url" && schema instanceof z.ZodString) {
-    schema = schema.url("Invalid URL")
+    schema = z.url("Invalid URL")
   }
   if (field.type === "phone" && schema instanceof z.ZodString) {
     const phoneRegex = /^[\d\s\-\+\(\)]+$/
@@ -193,7 +192,11 @@ export function generateZodSchema(
 /**
  * Metadata for available validation rule types
  */
-export const validationRuleTypes = [
+export const validationRuleTypes: {
+  type: ValidationRule["type"]
+  label: string
+  requiresValue: boolean
+}[] = [
   { type: "required", label: "Required", requiresValue: false },
   { type: "minLength", label: "Minimum Length", requiresValue: true },
   { type: "maxLength", label: "Maximum Length", requiresValue: true },

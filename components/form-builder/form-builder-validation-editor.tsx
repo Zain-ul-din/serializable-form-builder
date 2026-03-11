@@ -14,6 +14,7 @@ export function FormBuilderValidationEditor({ fieldId }: { fieldId: string }) {
     removeValidationRule,
     updateValidationRule,
   } = useFormBuilder()
+
   const field = fields.find((f) => f.id === fieldId)
 
   if (!field) return null
@@ -87,8 +88,7 @@ export function FormBuilderValidationEditor({ fieldId }: { fieldId: string }) {
 
     const updatedRule: ValidationRule = {
       ...existing.rule,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      value: value as any,
+      value,
     } as ValidationRule
 
     updateValidationRule(fieldId, existing.index, updatedRule)
@@ -134,10 +134,8 @@ export function FormBuilderValidationEditor({ fieldId }: { fieldId: string }) {
                       : "Enter value"
                   }
                   value={
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (existing.rule as any).value !== undefined
-                      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        (existing.rule as any).value
+                    (existing.rule as { value: string }).value !== undefined
+                      ? (existing.rule as { value: string }).value
                       : ""
                   }
                   onChange={(e) =>

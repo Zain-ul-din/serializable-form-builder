@@ -18,10 +18,10 @@ export function FormBuilderFieldControls({
   return (
     <div
       onClick={() => selectField(id)}
-      className={`cursor-pointer transition-all ${
+      className={`cursor-pointer rounded-lg p-2 transition-all ${
         isSelected
-          ? "rounded-lg ring-2 ring-primary"
-          : "rounded-lg hover:ring-1 hover:ring-border"
+          ? "bg-primary/10 ring-1 ring-primary/50"
+          : "hover:bg-muted/50"
       }`}
     >
       <div className="absolute top-0 right-0 z-10 flex w-full">

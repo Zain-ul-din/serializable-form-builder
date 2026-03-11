@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { useFormBuilder } from "./form-builder-context"
 import { Field, FieldLabel, FieldSeparator } from "../ui/field"
 import { Input } from "../ui/input"
@@ -19,7 +18,6 @@ export function FormBuilderSettingsRender({
 }) {
   const { fields, selectedFieldId, updateFieldProperty } = useFormBuilder()
   const field = fields.find((f) => f.id === selectedFieldId)
-  const [nameError, setNameError] = useState<string | null>(null)
 
   const showOptionsEditor =
     field && (field.type === "select" || field.type === "multiselect")
@@ -27,7 +25,7 @@ export function FormBuilderSettingsRender({
   if (!selectedFieldId || !field) {
     return (
       <div
-        className={cn("flex h-full items-center justify-center p-8", className)}
+        className={cn("flex h-full items-center justify-center p-4", className)}
       >
         <Empty>
           <EmptyHeader>
@@ -45,7 +43,7 @@ export function FormBuilderSettingsRender({
   }
 
   return (
-    <div className={cn("h-full space-y-6 overflow-y-auto p-6", className)}>
+    <div className={cn("h-full space-y-6 overflow-y-auto p-4", className)}>
       {/* General Settings Section */}
       <div>
         <h3 className="mb-4 text-base font-semibold">General Settings</h3>
@@ -59,41 +57,6 @@ export function FormBuilderSettingsRender({
                 updateFieldProperty(selectedFieldId, "label", e.target.value)
               }
             />
-          </Field>
-
-          <Field>
-            <FieldLabel>Field Name</FieldLabel>
-            <Input
-              placeholder="field_name"
-              value={field.name}
-              onChange={(e) => {
-                const value = e.target.value
-                // Validate: not empty, valid identifier chars
-                if (!value.trim()) {
-                  setNameError("Field name cannot be empty")
-                  return
-                }
-                if (!/^[a-z][a-z0-9_]*$/.test(value)) {
-                  setNameError(
-                    "Must start with a letter and contain only lowercase letters, numbers, and underscores"
-                  )
-                  return
-                }
-                // Check for duplicates
-                const isDuplicate = fields.some(
-                  (f) => f.id !== selectedFieldId && f.name === value
-                )
-                if (isDuplicate) {
-                  setNameError("A field with this name already exists")
-                  return
-                }
-                setNameError(null)
-                updateFieldProperty(selectedFieldId, "name", value)
-              }}
-            />
-            {nameError && (
-              <p className="text-sm text-destructive">{nameError}</p>
-            )}
           </Field>
 
           <Field>
@@ -153,7 +116,7 @@ export function FormBuilderSettingsRender({
 
       {/* Validation Rules Section */}
       <FieldSeparator />
-      <div>
+      <div className="mt-4">
         <h3 className="mb-4 text-base font-semibold">Validation Rules</h3>
         <FormBuilderValidationEditor fieldId={selectedFieldId} />
       </div>

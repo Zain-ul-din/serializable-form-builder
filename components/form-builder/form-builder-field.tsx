@@ -49,7 +49,7 @@ export function FormBuilderField({
         <div
           {...listeners}
           {...attributes}
-          className="absolute top-1/2 left-0 -translate-x-8 -translate-y-1/2 cursor-grab opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
+          className="absolute top-1/2 left-0 -translate-x-4 -translate-y-1/2 cursor-grab opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
         >
           <GripVertical className="size-5 text-muted-foreground hover:text-foreground" />
         </div>

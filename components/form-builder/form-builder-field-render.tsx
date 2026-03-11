@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select"
-import { FieldLabel } from "../ui/field"
+import { Field, FieldLabel } from "../ui/field"
 
 /**
  * Pure rendering component for form fields
@@ -128,7 +128,7 @@ export function FormBuilderFieldRenderer({ field }: { field: FieldConfig }) {
   }
 
   return (
-    <div className="space-y-2">
+    <Field>
       <FieldLabel className="text-sm font-medium">
         {field.label}
         {field.required && <span className="ml-1 text-destructive">*</span>}
@@ -137,6 +137,6 @@ export function FormBuilderFieldRenderer({ field }: { field: FieldConfig }) {
       {field.description && (
         <p className="text-sm text-muted-foreground">{field.description}</p>
       )}
-    </div>
+    </Field>
   )
 }

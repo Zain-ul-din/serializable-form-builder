@@ -14,7 +14,8 @@ export function FormBuilderCanvasRender({ className }: { className?: string }) {
   return (
     <section
       className={cn(
-        "flex h-full w-full items-center justify-center",
+        "flex h-full w-full",
+        fields.length === 0 && "items-center justify-center",
         className
       )}
     >
@@ -22,8 +23,8 @@ export function FormBuilderCanvasRender({ className }: { className?: string }) {
         <Empty
           ref={setNodeRef}
           className={cn(
-            "h-full border-2 border-dashed",
-            isOver && "bg-card/50"
+            "h-full",
+            isOver && "border-2 border-dashed bg-card/50"
           )}
         >
           <EmptyHeader>
