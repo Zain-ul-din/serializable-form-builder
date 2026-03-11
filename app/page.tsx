@@ -1,11 +1,6 @@
 import { Footer } from "@/components/footer"
-import {
-  FormBuilder,
-  FormBuilderCanvas,
-  FormBuilderPalette,
-  FormBuilderPaletteItems,
-  FormBuilderSettings,
-} from "@/components/form-builder/form-builder"
+
+import { FormBuilderDemo } from "./_components/form-builder-demo"
 import { Header } from "@/components/header"
 
 export default function Page() {
@@ -14,13 +9,7 @@ export default function Page() {
       <Header />
       <main className="flex items-center justify-center py-24">
         <section className="w-full p-4">
-          <FormBuilder>
-            <FormBuilderPalette>
-              <FormBuilderPaletteItems />
-            </FormBuilderPalette>
-            <FormBuilderCanvas />
-            <FormBuilderSettings />
-          </FormBuilder>
+          <FormBuilderDemo />
         </section>
       </main>
       <Footer />
