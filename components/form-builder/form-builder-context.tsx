@@ -80,7 +80,6 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
         label: paletteItem.label,
         id: nanoid(),
         //   name: createFieldName(paletteItem.label, fields),
-        name: nanoid(),
         validation: [],
         required: false,
       }
