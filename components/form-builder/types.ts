@@ -42,7 +42,6 @@ export type FieldOption = {
 export type FieldConfig = {
   id: string
   type: FieldType
-  name: string
   label: string
   placeholder?: string
   description?: string
