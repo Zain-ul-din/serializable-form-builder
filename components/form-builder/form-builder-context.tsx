@@ -2,9 +2,28 @@
 import { createContext, use, useState } from "react"
 
 import { ReactNode } from "react"
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
-import { DragData, FieldConfig, FieldOption, PaletteItemConfig, ValidationRule } from "./types"
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+} from "@dnd-kit/core"
+import {
+  DragData,
+  FieldConfig,
+  FieldOption,
+  PaletteItemConfig,
+  ValidationRule,
+} from "./types"
 import { nanoid } from "nanoid"
+import z from "zod/v4"
+import { generateZodSchema } from "./form-builder-validation-rules"
+
+type FormBuilderState = {
+  fields: FieldConfig[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: z.ZodObject<any>
+}
 
 type FormBuilderContextValue = {
   fields: FieldConfig[]
@@ -30,6 +49,7 @@ type FormBuilderContextValue = {
     ruleIndex: number,
     rule: ValidationRule
   ) => void
+  getBuilderState: () => FormBuilderState
 }
 
 const FromBuilderContext = createContext<FormBuilderContextValue | null>(null)
@@ -37,7 +57,8 @@ const FromBuilderContext = createContext<FormBuilderContextValue | null>(null)
 export function FormBuilderProvider({ children }: { children?: ReactNode }) {
   const [fields, setFields] = useState<FieldConfig[]>([])
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null)
-  const [activePaletteItem, setActivePaletteItem] = useState<PaletteItemConfig | null>(null)
+  const [activePaletteItem, setActivePaletteItem] =
+    useState<PaletteItemConfig | null>(null)
 
   const handleOnDragStart = (e: DragStartEvent) => {
     const dragData = e.active.data.current as DragData
@@ -47,12 +68,11 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
   }
 
   const handleOnDragEnd = (e: DragEndEvent) => {
+    if (!e.over) return
     setActivePaletteItem(null)
     const dragData = e.active.data.current as DragData
 
     if (dragData.source === "palette") {
-      if (!e.over) return
-
       const paletteItem = dragData.item
 
       const newField: FieldConfig = {
@@ -67,6 +87,7 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
 
       if (e.over?.id === "form-builder-canvas") {
         setFields((prev) => [...prev, newField])
+        setSelectedFieldId(newField.id)
         return
       }
 
@@ -82,18 +103,34 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
         setSelectedFieldId(newField.id) // Auto-select new field
       }
     }
+
+    if (dragData.source === "field") {
+      const fromIndex = dragData.index
+
+      if (e.over.id.toString().startsWith("field-")) {
+        const toIndex = e.over.data.current?.index as number
+
+        if (fromIndex !== toIndex) {
+          setFields((prev) => {
+            const updated = [...prev]
+            const [removed] = updated.splice(fromIndex, 1)
+            updated.splice(toIndex, 0, removed)
+            return updated
+          })
+        }
+      }
+    }
   }
 
   return (
     <FromBuilderContext
       value={{
+        // fields
         fields,
         selectedFieldId,
-
         selectField(id) {
           setSelectedFieldId(id)
         },
-
         removeField(id) {
           setFields((prev) => prev.filter((field) => field.id !== id))
           // Clear selection if deleted field was selected
@@ -101,7 +138,6 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
             setSelectedFieldId(null)
           }
         },
-
         updateField(id, updates) {
           setFields((prev) =>
             prev.map((field) =>
@@ -109,7 +145,6 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
             )
           )
         },
-
         updateFieldProperty(id, property, value) {
           setFields((prev) =>
             prev.map((field) =>
@@ -117,19 +152,7 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
             )
           )
         },
-
-        addOption(id, option) {
-          setFields((prev) =>
-            prev.map((field) =>
-              field.id === id
-                ? {
-                    ...field,
-                    options: [...(field.options || []), option],
-                  }
-                : field
-            )
-          )
-        },
+        // validation rules
         addValidationRule(id, rule) {
           setFields((prev) =>
             prev.map((field) =>
@@ -139,7 +162,6 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
             )
           )
         },
-
         removeValidationRule(id, ruleIndex) {
           setFields((prev) =>
             prev.map((field) =>
@@ -154,7 +176,6 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
             )
           )
         },
-
         updateValidationRule(id, ruleIndex, rule) {
           setFields((prev) =>
             prev.map((field) =>
@@ -169,7 +190,19 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
             )
           )
         },
-
+        // options
+        addOption(id, option) {
+          setFields((prev) =>
+            prev.map((field) =>
+              field.id === id
+                ? {
+                    ...field,
+                    options: [...(field.options || []), option],
+                  }
+                : field
+            )
+          )
+        },
         removeOption(id, optionIndex) {
           setFields((prev) =>
             prev.map((field) =>
@@ -182,7 +215,6 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
             )
           )
         },
-
         updateOption(id, optionIndex, option) {
           setFields((prev) =>
             prev.map((field) =>
@@ -196,6 +228,12 @@ export function FormBuilderProvider({ children }: { children?: ReactNode }) {
                 : field
             )
           )
+        },
+        getBuilderState: () => {
+          return {
+            fields,
+            schema: generateZodSchema(fields),
+          }
         },
       }}
     >

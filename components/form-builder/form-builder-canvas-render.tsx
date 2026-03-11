@@ -23,8 +23,8 @@ export function FormBuilderCanvasRender({ className }: { className?: string }) {
         <Empty
           ref={setNodeRef}
           className={cn(
-            "h-full border-2 border-dashed",
-            isOver && "bg-card/50"
+            "h-full",
+            isOver && "border-2 border-dashed bg-card/50"
           )}
         >
           <EmptyHeader>
