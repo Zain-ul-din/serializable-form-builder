@@ -1,16 +1,17 @@
 import { Footer } from "@/components/footer"
-
-import { FormBuilderDemo } from "./_components/form-builder-demo"
 import { Header } from "@/components/header"
+import { HeroSection } from "./_components/hero-section"
+import { FeaturesSection } from "./_components/features-section"
+import { DemoSection } from "./_components/demo-section"
 
 export default function Page() {
   return (
     <>
       <Header />
-      <main className="flex items-center justify-center py-24">
-        <section className="w-full p-4">
-          <FormBuilderDemo />
-        </section>
+      <main>
+        <HeroSection />
+        <FeaturesSection />
+        <DemoSection />
       </main>
       <Footer />
     </>
