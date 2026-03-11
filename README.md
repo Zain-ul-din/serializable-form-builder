@@ -15,7 +15,22 @@ https://github.com/user-attachments/assets/d59d11c1-8d2b-40fa-b0ec-c7333dac4792
 
 ## Documentation
 
-Coming soon.
+**API:**
+
+```tsx
+<FormBuilder>
+  <FormBuilderHeader>
+    ...
+  </FormBuilderHeader>
+  <FormBuilderPalette>
+    <FormBuilderPaletteItems />
+  </FormBuilderPalette>
+  <FormBuilderCanvas />
+  <FormBuilderSettings />
+</FormBuilder>
+```
+
+More Coming soon.
 
 ## Getting Started
 
